@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html>
+<body>
+
+    <input id="n1" type="text">
+    <input id="n2" type="text">
+    <br><br>
+
+    <button onclick="op='+'">+</button>
+    <button onclick="op='-'">-</button>
+    <button onclick="op='*'">*</button>
+    <button onclick="op='/'">/</button>
+    
+    <button onclick="calcola()">=</button>
+
+    <h3 id="risultato">Risultato: </h3>
+
+    <script>
+        let op = "";
+
+        function calcola() {
+            let a = parseFloat(n1.value);
+            let b = parseFloat(n2.value);
+            
+            let res = op === '+' ? a + b :
+                      op === '-' ? a - b :
+                      op === '*' ? a * b :
+                      op === '/' ? a / b : "Seleziona operazione";
+
+            risultato.innerText = "Risultato: " + res;
+        }
+    </script>
+
+</body>
+</html>
