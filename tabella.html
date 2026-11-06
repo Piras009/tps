@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html>
+<body>
+
+    <input id="nome" type="text" placeholder="Nome">
+    <input id="cognome" type="text" placeholder="Cognome">
+    <input id="indirizzo" type="text" placeholder="Indirizzo">
+    <input id="citta" type="text" placeholder="Città">
+    <input id="eta" type="number" placeholder="Età">
+    
+    <button onclick="aggiungiRiga()">Aggiungi</button>
+
+    <table id="miaTabella" border="1">
+        <tr>
+            <th>Nome</th>
+            <th>Cognome</th>
+            <th>Indirizzo</th>
+            <th>Città</th>
+            <th>Età</th>
+        </tr>
+    </table>
+
+    <script>
+        function aggiungiRiga() {
+            let table = document.getElementById("miaTabella");
+            let row = table.insertRow();
+            
+            [nome, cognome, indirizzo, citta, eta].forEach(input => {
+                row.insertCell().innerText = input.value;
+            });
+        }
+    </script>
+
+</body>
+</html>
