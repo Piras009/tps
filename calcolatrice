@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Semi-Calcolatrice Modulare</title>
+    <style>
+        :root {
+            --bg-color: #f4f6f9;
+            --card-bg: #ffffff;
+            --primary: #2563eb;
+            --primary-hover: #1d4ed8;
+            --accent: #10b981;
+            --accent-hover: #059669;
+            --border: #e2e8f0;
+            --text: #1e293b;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+        }
+
+        .calculator-card {
+            background-color: var(--card-bg);
+            padding: 24px;
+            border-radius: 12px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.08);
+            width: 100%;
+            max-width: 400px;
+        }
+
+        .calculator-card h2 {
+            margin-top: 0;
+            margin-bottom: 20px;
+            font-size: 1.25rem;
+            text-align: center;
+            color: #475569;
+        }
+
+        /* Sezione Input */
+        .inputs-group {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            margin-bottom: 20px;
+        }
+
+        .inputs-group input {
+            padding: 12px;
+            font-size: 1rem;
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            outline: none;
+            transition: border-color 0.2s;
+        }
+
+        .inputs-group input:focus {
+            border-color: var(--primary);
+        }
+
+        /* Griglia dei pulsanti estendibile */
+        .operations-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 10px;
+            margin-bottom: 12px;
+        }
+
+        .btn {
+            padding: 14px;
+            font-size: 1.2rem;
+            font-weight: bold;
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            background-color: #f8fafc;
+            color: var(--text);
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .btn:hover {
+            background-color: #e2e8f0;
+        }
+
+        /* Stato selezionato per l'operazione attiva */
+        .btn.active {
+            background-color: var(--primary);
+            color: white;
+            border-color: var(--primary);
+        }
+
+        /* Tasto Uguale dedicato */
+        .btn-equals {
+            width: 100%;
+            padding: 14px;
+            font-size: 1.2rem;
+            font-weight: bold;
+            background-color: var(--accent);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: background-color 0.2s;
+        }
+
+        .btn-equals:hover {
+            background-color: var(--accent-hover);
+        }
+
+        /* Display del Risultato */
+        .result-display {
+            margin-top: 20px;
+            padding: 16px;
+            background-color: #f8fafc;
+            border-radius: 8px;
+            border: 1px dashed var(--border);
+            text-align: center;
+        }
+
+        .result-display label {
+            display: block;
+            font-size: 0.85rem;
+            color: #64748b;
+            margin-bottom: 4px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .result-display span {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: var(--text);
+            word-break: break-all;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="calculator-card">
+        <h2>Semi-Calcolatrice</h2>
+
+        <!-- Input Dati -->
+        <div class="inputs-group">
+            <input type="text" id="num1" placeholder="Primo numero (es. 10)">
+            <input type="text" id="num2" placeholder="Secondo numero (es. 5)">
+        </div>
+
+        <!-- Tastiera Operazioni (Layout flessibile via CSS Grid) -->
+        <div class="operations-grid" id="operationsGrid">
+            <button class="btn op-btn" data-op="+">+</button>
+            <button class="btn op-btn" data-op="-">-</button>
+            <button class="btn op-btn" data-op="*">&times;</button>
+            <button class="btn op-btn" data-op="/">&divide;</button>
+        </div>
+
+        <!-- Pulsante di Esecuzione -->
+        <button class="btn-equals" id="btnEquals">=</button>
+
+        <!-- Display Output -->
+        <div class="result-display">
+            <label>Risultato</label>
+            <span id="output">---</span>
+        </div>
+    </div>
+
+    <script>
+        const operations = {
+            '+': (a, b) => a + b,
+            '-': (a, b) => a - b,
+            '*': (a, b) => a * b,
+            '/': (a, b) => b === 0 ? "Errore: Div / 0" : a / b
+        };
+
+        let selectedOperation = null;
+
+        const opButtons = document.querySelectorAll('.op-btn');
+        const btnEquals = document.getElementById('btnEquals');
+        const num1Input = document.getElementById('num1');
+        const num2Input = document.getElementById('num2');
+        const outputSpan = document.getElementById('output');
+
+        opButtons.forEach(button => {
+            button.addEventListener('click', () => {
+                // Rimuove lo stato attivo dagli altri pulsanti
+                opButtons.forEach(btn => btn.classList.remove('active'));
+                
+                selectedOperation = button.getAttribute('data-op');
+                button.classList.add('active');
+            });
+        });
+
+        btnEquals.addEventListener('click', () => {
+            const val1Raw = num1Input.value.trim().replace(',', '.');
+            const val2Raw = num2Input.value.trim().replace(',', '.');
+
+            if (!selectedOperation) {
+                outputSpan.textContent = "Seleziona un'operazione";
+                return;
+            }
+
+            const val1 = parseFloat(val1Raw);
+            const val2 = parseFloat(val2Raw);
+
+            if (isNaN(val1) || isNaN(val2)) {
+                outputSpan.textContent = "Inserire numeri validi";
+                return;
+            }
+
+            const result = operations[selectedOperation](val1, val2);
+
+            if (typeof result === 'number') {
+                // Arrotonda al massimo a 4 cifre decimali se necessario
+                outputSpan.textContent = Math.round(result * 10000) / 10000;
+            } else {
+                outputSpan.textContent = result; // Gestione messaggi d'errore (es. Div / 0)
+            }
+        });
+    </script>
+
+</body>
+</html>
