@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Decripta Frase</title>
+</head>
+<body>
+
+    <h2>Decripta Frase</h2>
+    <input id="frase" type="text" placeholder="Inserisci frase criptata"><br><br>
+    <input id="scost" type="number" placeholder="Scostamento (es. 3)"><br><br>
+    <button onclick="elabora('d')">Decripta</button>
+
+    <h3 id="ris">Frase corretta: </h3>
+    <a href="cripta.html">Torna a criptare</a>
+
+    <script>
+        function elabora(modo) {
+            let alf = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+            let testo = frase.value.toUpperCase();
+            let s = parseInt(scost.value);
+            let out = "";
+
+            for (let i = 0; i < testo.length; i++) {
+                let pos = alf.indexOf(testo[i]);
+
+                switch (pos) {
+                    case -1:
+                        out += testo[i];
+                        break;
+                    default:
+                        let nuovaPos;
+                        if (modo == 'c') {
+                            nuovaPos = (pos + s) % 26;
+                        } else {
+                            nuovaPos = (pos - s) % 26;
+                        }
+                        if (nuovaPos < 0) nuovaPos += 26;
+                        out += alf[nuovaPos];
+                }
+            }
+
+            ris.innerText = "Frase corretta: " + out;
+        }
+    </script>
+
+</body>
+</html>
