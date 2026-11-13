@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+DOCTYPE html>
 <html>
 <head>
     <title>Semi-Calcolatrice</title>
@@ -36,7 +36,11 @@
                     r = a * b;
                     break;
                 case '/':
-                    r = b == 0 ? "Errore (Div/0)" : a / b;
+                    if (b == 0) {
+                        r = "Errore (Div/0)";
+                    } else {
+                        r = a / b;
+                    }
                     break;
                 default:
                     r = "Seleziona un'operazione";
