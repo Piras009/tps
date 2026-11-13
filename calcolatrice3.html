@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Semi-Calcolatrice</title>
+</head>
+<body>
+
+    <h2>Semi-Calcolatrice</h2>
+    <input id="n1" type="text" placeholder="Numero 1"><br><br>
+    <input id="n2" type="text" placeholder="Numero 2"><br><br>
+    
+    <button onclick="op='+'">+</button>
+    <button onclick="op='-'">-</button>
+    <button onclick="op='*'">*</button>
+    <button onclick="op='/'">/</button>
+    <button onclick="calcola()">=</button>
+
+    <h3 id="ris">Risultato: </h3>
+
+    <script>
+        let op = "";
+
+        function calcola() {
+            let a = parseFloat(n1.value);
+            let b = parseFloat(n2.value);
+            let r;
+
+            switch (op) {
+                case '+':
+                    r = a + b;
+                    break;
+                case '-':
+                    r = a - b;
+                    break;
+                case '*':
+                    r = a * b;
+                    break;
+                case '/':
+                    r = b == 0 ? "Errore (Div/0)" : a / b;
+                    break;
+                default:
+                    r = "Seleziona un'operazione";
+            }
+
+            ris.innerText = "Risultato: " + r;
+        }
+    </script>
+
+</body>
+</html>
