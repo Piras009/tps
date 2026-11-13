@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <title>Tabella Dinamica</title>
+</head>
+<body>
+    <div style="border: 1px solid black; padding: 10px; width: 200px;">
+        Nome: <input type="text" id="nome"><br><br>
+        Cognome: <input type="text" id="cognome"><br><br>
+        Indirizzo: <input type="text" id="indirizzo"><br><br>
+        Città: <input type="text" id="citta"><br><br>
+        Età: <input type="number" id="eta"><br><br>
+        <button onclick="aggiungi()">Aggiungi</button>
+    </div>
+
+    <br>
+    <table id="tabella" border="1">
+        <tr>
+            <th>Nome</th>
+            <th>Cognome</th>
+            <th>Indirizzo</th>
+            <th>Città</th>
+            <th>Età</th>
+        </tr>
+    </table>
+
+    <script>
+        function aggiungi() {
+            let tabella = document.getElementById("tabella");
+            let riga = tabella.insertRow(-1); 
+
+            for (let i = 0; i < 5; i++) {
+                let cella = riga.insertCell(i); 
+
+                switch (i) {
+                    case 0: cella.innerHTML = document.getElementById("nome").value; break;
+                    case 1: cella.innerHTML = document.getElementById("cognome").value; break;
+                    case 2: cella.innerHTML = document.getElementById("indirizzo").value; break;
+                    case 3: cella.innerHTML = document.getElementById("citta").value; break;
+                    case 4: cella.innerHTML = document.getElementById("eta").value; break;
+                }
+            }
+        }
+    </script>
+
+</body>
+</html>
